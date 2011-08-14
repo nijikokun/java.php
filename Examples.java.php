@@ -20,6 +20,8 @@ out::prntln("Contains 'e'? " . (($hello->contains("e")) ? 'true' : 'false'));
 // Show the last index of o
 out::prntln("Last index of 'o': " . ((!$hello->lastIndexOf("o")) ? 'false' :  $hello->lastIndexOf("o")));
 
+// ----------------------------------------------------- //
+
 // New Section
 out::prntln();
 
