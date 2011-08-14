@@ -23,8 +23,27 @@ out::prntln("Last index of 'o': " . ((!$hello->lastIndexOf("o")) ? 'false' :  $h
 // New Section
 out::prntln();
 
+// ----------------------------------------------------- //
+
 // Initialize a File
-$self = new File("Examples.java.php");
+$file = new File("index.php");
+
+// Get the name
+out::prntln("Filename? " . $file->getName());
+
+// Is it a file?
+out::prntln("File? " . (($file->isFile()) ? 'true' : 'false'));
 
 // Check validation.
-out::prntln("Does it exist? " . (($self->exists()) ? 'true' : 'false'));
+out::prntln("Does it exist? " . (($file->exists()) ? 'true' : 'false'));
+
+// Attempt creation
+out::prntln("Creation? " . (($file->createNewFile()) ? 'true' : 'false'));
+
+// Size?
+out::prntln("Size: " . $file->length());
+
+// Last modified?
+out::prntln("Last modified: " . $file->lastModified());
+
+// ----------------------------------------------------- //
