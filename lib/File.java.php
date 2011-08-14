@@ -211,8 +211,8 @@ class File {
     public function createNewFile() {
         $created = null;
         
-        if(!$this->exists() && $this->isFile())
-            $created = fclose(fopen($filename,"x"));
+        if(!$this->exists() && !$this->isDirectory())
+            $created = fclose(fopen($this->path, "x"));
             
         if($created != null)
             return true;
