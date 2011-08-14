@@ -180,7 +180,7 @@ class File {
      *
      * @return  A <code>long</code> value representing the time the file was
      *          last modified, measured in milliseconds since the epoch
-     *          (00:00:00 GMT, January 1, 1970), or <code>0L</code> if the
+     *          (00:00:00 GMT, January 1, 1970), or <code>0</code> if the
      *          file does not exist or if an I/O error occurs
      * @since 1.0.2
      */
@@ -188,11 +188,12 @@ class File {
         if ($this->exists())
             return correctmtime($this->path);
         
-        throw new Exception('File ' . $this->getName() . ' does not exist.');
+        return 0;
     }
     
     /**
      * Return file size if the file exists.
+     *
      * @since 1.0.2
      */
     public function length() {
