@@ -242,8 +242,111 @@ class File {
         
         return true;
     }
+    
+    /**
+     * Returns a list of files from a directory.
+     * If the path is not a directory returns null.
+     *
+     * In Java this method is known as (list) a reserved
+     * method in PHP.
+     *
+     * @param $filter User function that returns true / false 
+     *                based on its method of filtering out files.
+     *                True accepts a file, false skips.
+     * @return Array or Null
+     */
+    public function listing($filter = null) {
+        if(!$this->isDirectory || !$this->exists)
+            return null;
+            
+        $files = array();
+        
+        $dir = opendir($this->path);
+        while (false !== ($file = readdir($dir))) {
+            if($filter != null)
+                $result = call_user_func_array($filter, $file);
+            else
+                $result = true;
+                
+            if($result)
+                $files[] = $file;
+        }
+
+        return $files;
+    }
+    
+    /**
+     * Returns a list of files from a directory each path is returned as a File.
+     * If the path is not a directory returns null.
+     *
+     * In Java this method is known as (listFiles) which would make no sense with
+     * contents instead of list. So we put fileListing.
+     *
+     * @param $filter User function that accepts an array of files to filter through.
+     * @return Array or Null
+     */
+    public function fileListing($filter = null) {
+        if(!$this->isDirectory || !$this->exists)
+            return null;
+            
+        $files = array();
+        
+        $dir = opendir($this->path);
+        while (false !== ($file = readdir($dir))) {
+            if($filter != null)
+                $result = call_user_func_array($filter, $file);
+            else
+                $result = true;
+                
+            if($result)
+                $files[] = new File($file);
+        }
+
+        return $files;
+    }
+    
+    /**
+     * Create the directory from path if it does not already exist.
+     */
+    public function mkdir($chmod = '0755') {
+        if(!$this->exists)
+            return mkdir($this->path, $chmod);
+            
+        return false;
+    }
+    
+    /**
+     * Recursively create directories if the last does not exist.
+     */
+    public function mkdirs($chmod = '0755') {
+        if(!$this->exists)
+            return mkdir($this->path, $chmod, true);
+            
+        return false;
+    }
+    
+    /**
+     * @override
+     */
+    public function __toString() {
+        return $this->path;
+    }
 
     private function isEmptyDir() { 
         return (($files = @scandir($this->path)) && count($files) <= 2); 
-    } 
+    }
+    
+    private function scanDirectory() {
+        if (!function_exists('scandir')) {
+            $files = array();
+            
+            $dir = opendir($this->path);
+            while (false !== ($file = readdir($dir))) {
+                $files[] = $file;
+            }
+        } else 
+            $files = scandir($this->path);
+            
+        return $files;
+    }
 }
